@@ -2,8 +2,13 @@
   (:require
    [clojure.edn :as edn]
    [shadow.resource :as rc]
+   [siheom.default-runtime-impl :refer [resolve-story]]
+   [siheom.examples.counter :refer [counter]]
    [siheom.siheom :as sh]
    [vitest.clojure-testing :refer [testing]]))
+
+(defmethod resolve-story :Examples/counter [_]
+  [counter])
 
 ;; siheom test is just a data
 (def test-suite-edn (rc/inline "siheom/examples/counter_test.edn"))

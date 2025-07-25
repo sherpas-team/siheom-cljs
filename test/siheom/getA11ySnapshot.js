@@ -72,8 +72,6 @@ export function getA11ySnapshot(element) {
         if (el === null || el === undefined || el.ariaHidden === 'true' || el.hidden || el.tagName === "IFRAME") return "";
         const role = getAriaRole(el);
 
-        if (role === "presentation") return "";
-
         const name = getAccessibleName(el) || el.ariaLabel;
 
         let result = role
@@ -88,15 +86,20 @@ export function getA11ySnapshot(element) {
 
         const childNodes = Array.from(el.childNodes).filter(child => !(child instanceof SVGElement));
 
-        if (childNodes.every(child => child instanceof Text) && childNodes.map(child => child.textContent).join("").trim() === name) {
+        const isAllChildrenTextOrImage = childNodes.every(child => child instanceof Text || child instanceof HTMLSpanElement || child instanceof SVGAElement || child instanceof HTMLImageElement);
+        if (el.tagName === "LABEL" && el.id && isAllChildrenTextOrImage) {
+            return "";
+        }
+
+        if (isAllChildrenTextOrImage && childNodes.map(child => child.textContent).join("").trim() === name) {
             return result;
         }
 
-        if (childNodes.every(child => child instanceof Text) && childNodes.map(child => child.textContent).join("").trim() === "") {
+        if (isAllChildrenTextOrImage && childNodes.map(child => child.textContent).join("").trim() === "") {
             return result;
         }
 
-        if (childNodes.every(child => child instanceof Text)) {
+        if (isAllChildrenTextOrImage) {
             return `${result}${"  ".repeat(depth + 1)}"${childNodes.map(child => child.textContent).join("").trim()}"\n`;
         }
 

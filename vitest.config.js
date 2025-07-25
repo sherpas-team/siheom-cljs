@@ -13,7 +13,7 @@ export default {
         },
         browser: {
             enabled: true,
-            headless: false,
+            headless: true,
             provider: "playwright",
             fileParallelism: true,
             instances: [

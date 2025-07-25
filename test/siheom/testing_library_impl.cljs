@@ -170,10 +170,10 @@
 (defn type!
   "input이나 textarea 등의 요소에 텍스트를 입력합니다."
   [get-element text]
-  (waitFor (fn []
-             (-> (visible? get-element true)
-                 (.then #(.type user-event (get-element) text))))
-           #js{:timeout 3000}))
+  (-> (visible? get-element true)
+      (.then #(waitFor (fn []
+                         (.type user-event (get-element) text))
+                       #js{:timeout 3000}))))
 
 
 (defn fill!

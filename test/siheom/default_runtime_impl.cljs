@@ -56,12 +56,6 @@
           (test-util/query-all-within parent (:role locator) (:name locator)))
         :else (test-util/query-all (:role locator) (:name locator) true)))
 
-(def react-render-impl
-  {:run (fn [{:keys [story-title]}]
-          (cleanup)
-          (test-util/render-cp (resolve-story story-title)))
-   :log (fn [{:keys [story-title]}]
-          (str "render: " story-title))})
 (def wait-duration 0)
 
 (defn wait [duration]
@@ -75,16 +69,19 @@
    :a11y-snapshot "접근성 스냅샷"})
 
 (def default-runtime-impl
-  {:hooks   {:after-action (fn [{:keys [_name _args]}]
-                             (waitFor (fn []
-                                        (r/flush)
-                                        (wait wait-duration))))}
-   :i18n    ko-dict
-   :actions {:render react-render-impl
+  {:actions {:render {:run (fn [{:keys [story-title]}]
+                             (cleanup)
+                             (test-util/render-cp (resolve-story story-title)))
+                      :log (fn [{:keys [story-title]}]
+                             (str "render: " story-title))}
              :click {:run (fn [{:keys [locator]}]
                             (test-util/click! (fn [] (get-element locator))))
                      :log (fn [{:keys [locator]}]
                             (str "click! " (:role locator) " " (:name locator)))}
+             :visible? {:run (fn [{:keys [locator expected]}]
+                               (test-util/visible? #(get-element locator (not expected)) expected))
+                        :log (fn [{:keys [locator expected]}]
+                               (str (if expected "보이는지?: " "안 보이는지?: ") (:role locator) " " (:name locator)))}
              :value? {:run (fn [{:keys [locator expected]}]
                              (test-util/value? #(get-element locator) expected))
                       :log (fn [{:keys [locator expected]}]
@@ -99,10 +96,6 @@
                              (test-util/count? #(get-elements locator) expected))
                       :log (fn [{:keys [locator expected]}]
                              (str expected "개 인지?: " (:role locator) " " (:name locator)))}
-             :visible? {:run (fn [{:keys [locator expected]}]
-                               (test-util/visible? #(get-element locator (not expected)) expected))
-                        :log (fn [{:keys [locator expected]}]
-                               (str (if expected "보이는지?: " "안 보이는지?: ") (:role locator) " " (:name locator)))}
              :match-a11y-snapshot? {:run (fn [{:keys [locator file-name]}]
                                            (-> (test-util/match-a11y-snapshot? #(get-element locator) file-name)
                                                (.then (fn [] nil))))
@@ -197,7 +190,7 @@
              :type! {:run (fn [{:keys [locator text]}]
                             (test-util/type! (fn [] (get-element locator)) text))
                      :log (fn [{:keys [locator text]}]
-                            (str "\"" text "\"를 입력한다!: " (:role locator) " " (:name locator)))}
+                            (str "type! : \"" text "\" to " (:role locator) " \"" (:name locator) "\""))}
              :fill! {:run (fn [{:keys [locator text]}]
                             (test-util/fill! (fn [] (get-element locator)) text))
                      :log (fn [{:keys [locator text]}]
@@ -209,7 +202,12 @@
              :keyboard! {:run (fn [{:keys [text]}]
                                 (test-util/keyboard! text))
                          :log (fn [{:keys [text]}]
-                                (str "\"" text "\"를 입력한다!"))}}})
+                                (str "\"" text "\" 키를 누른다!"))}}
+   :hooks   {:after-action (fn [{:keys [_name _args]}]
+                             (waitFor (fn []
+                                        (r/flush)
+                                        (wait wait-duration))))}
+   :i18n    ko-dict})
 
 (defn add-action [runtime-impl action-key {:keys [run log]}]
   (assert (some? run))
