@@ -11,6 +11,21 @@ export default {
                 include: ['vitest-canvas-mock']
             }
         },
+        browser: {
+            enabled: true,
+            headless: false,
+            provider: "playwright",
+            fileParallelism: true,
+            instances: [
+                {
+                    browser: 'chromium',
+                    context: {
+                        timezoneId: 'Asia/Seoul',
+                        permissions: ["clipboard-read"]
+                    },
+                },
+            ],
+        },
         exclude: ['node_modules', 'dist', '.idea', '.git', '.cache', 'e2e'],
         include: ['./target/vitest/js/*-test.js'],
         setupFiles: ['./test/setupTest.js'],
