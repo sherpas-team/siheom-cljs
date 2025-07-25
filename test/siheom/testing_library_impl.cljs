@@ -7,19 +7,9 @@
    [reagent.core :as r]
    [vitest.support :refer [get-a11y-snapshot rows->markdown table->markdown]]))
 
-(def wait-duration 0)
-
-(defn wait [duration]
-  (waitFor (fn []
-             (new js/Promise (fn [resolve]
-                               (js/setTimeout (fn [] (resolve nil)) duration))))))
-
 (defn render-cp [element]
-  (let [el (r/as-element element)]
-    (-> (waitFor (fn []
-                   (render el)
-                   (js/Promise.resolve nil)))
-        (.then #(wait wait-duration)))))
+  (waitFor (fn []
+             (render (r/as-element element)))))
 
 (defn query-within
   ([parent role name]
@@ -75,13 +65,9 @@
 (defn visible?
   [get-element expected]
   (waitFor (fn []
-             (-> (wait 0)
-                 (.then (fn []
-                          (if expected
-                            (get-element)
-                            (assert (= (get-element) nil) "element is visible"))
-                          nil))
-                 (.then #(wait wait-duration))))
+             (if expected
+               (get-element)
+               (assert (= (get-element) nil) "element is visible")))
            #js{:timeout 3000}))
 
 (defn disabled?
@@ -96,17 +82,12 @@
 
 (defn click!
   [get-element]
-  (waitFor (fn []
-             (let [element (get-element)]
-               (-> (visible? get-element true) ;; 보일 때까지 기다린다
-                   (.then #(disabled? get-element false))
-                   (.then #(.click user-event element))
-                   (.then (fn []
-                            (if (= (.-tagName element) "A")
-                              (wait 100)
-                              (wait wait-duration))))
-                   (.then #(wait wait-duration)))))
-           #js{:timeout 3000}))
+  (-> (visible? get-element true) ;; 보일 때까지 기다린다
+      (.then #(disabled? get-element false))
+      (.then (fn []
+               (waitFor (fn []
+                          (.click user-event (get-element)))
+                        #js{:timeout 3000})))))
 
 (defn dbl-click!
   [get-element]
@@ -114,12 +95,7 @@
              (let [element (get-element)]
                (-> (visible? get-element true) ;; 보일 때까지 기다린다
                    (.then #(disabled? get-element false))
-                   (.then #(.dblClick user-event element))
-                   (.then (fn []
-                            (if (= (.-tagName element) "A")
-                              (wait 100)
-                              (wait wait-duration))))
-                   (.then #(wait wait-duration)))))
+                   (.then #(.dblClick user-event element)))))
            #js{:timeout 3000}))
 
 (defn right-click!
@@ -128,16 +104,14 @@
              (-> (visible? get-element true) ;; 보일 때까지 기다린다
                  (.then #(disabled? get-element false))
                  (.then #(.click user-event (get-element) #js{:button 2}))
-                 (.then #(.contextMenu fireEvent (get-element)))
-                 (.then #(wait wait-duration))))
+                 (.then #(.contextMenu fireEvent (get-element)))))
            #js{:timeout 3000}))
 
 (defn upload!
   [get-element file]
   (waitFor (fn []
              (-> (visible? get-element true) ;; 보일 때까지 기다린다
-                 (.then #(.upload user-event (get-element) file))
-                 (.then #(wait wait-duration))))
+                 (.then #(.upload user-event (get-element) file))))
            #js{:timeout 3000}))
 
 
@@ -174,16 +148,14 @@
   [get-element]
   (waitFor (fn []
              (-> (visible? get-element true) ;; 보일 때까지 기다린다
-                 (.then #(.hover user-event (get-element)))
-                 (.then #(wait wait-duration))))))
+                 (.then #(.hover user-event (get-element)))))))
 
 (defn clear!
   "input이나 textarea 등의 요소를 지웁니다."
   [get-element]
   (waitFor (fn []
              (-> (visible? get-element true)
-                 (.then #(.clear user-event (get-element)))
-                 (.then #(wait wait-duration))))))
+                 (.then #(.clear user-event (get-element)))))))
 
 (defn keyboard!
   "주어진 키를 누릅니다."
@@ -197,8 +169,7 @@
   [get-element text]
   (waitFor (fn []
              (-> (visible? get-element true)
-                 (.then #(.type user-event (get-element) text))
-                 (.then #(wait wait-duration))))
+                 (.then #(.type user-event (get-element) text))))
            #js{:timeout 3000}))
 
 
@@ -211,8 +182,7 @@
                (waitFor (fn []
                           (-> (.clear user-event (get-element))
                               (.then #(.focus (get-element)))
-                              (.then #(.paste user-event text))
-                              (.then #(wait wait-duration)))))))))
+                              (.then #(.paste user-event text)))))))))
 
 
 (defn paste!
@@ -221,8 +191,7 @@
   (waitFor (fn []
              (-> (visible? get-element true)
                  (.then #(.focus (get-element)))
-                 (.then #(.paste user-event text))
-                 (.then #(wait wait-duration))))
+                 (.then #(.paste user-event text))))
            #js{:timeout 3000}))
 
 (defn value?
@@ -370,8 +339,7 @@
                                  (if (regexp? b)
                                    (some? (re-find b a))
                                    (= a b))) (map vector expected actual))
-                       (str "(not= \n" (format-vect-vertical actual) " \n  " (format-vect-vertical expected) " )")))
-             (wait 0))
+                       (str "(not= \n" (format-vect-vertical actual) " \n  " (format-vect-vertical expected) " )"))))
            #js{:timeout 3000}))
 
 (defn assert-equal [a b]

@@ -353,11 +353,12 @@
   {:name :keyboard!
    :args {:text text}})
 
-(defn init-siheom [runtime-impl]
+(defn init-siheom [{:keys [actions hooks]}]
   (fn [lines]
     (let [logs     (atom [])
+          after-action (get hooks :after-action)
           dispatch (fn [{:keys [name args]}]
-                     (let [action (get runtime-impl name)
+                     (let [action (get actions name)
                            run! (partial (:run action) args)
                            action-log (:log action)
                            log (if (fn? action-log)
@@ -372,7 +373,9 @@
 
                     (-> promise
                         (.then (fn []
-                                 (dispatch line)))))
+                                 (dispatch line)))
+                        (.then (fn []
+                                 (after-action line)))))
                   (js/Promise.resolve nil) lines)
           (.then (fn []
                    (cleanup)))
