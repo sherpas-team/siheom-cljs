@@ -34,7 +34,6 @@
     (util/visible? #(util/query "button" "click: 1") true)
     nil))
 
-
 (defmethod resolve-story :Examples/counter [_]
   [counter])
 
@@ -43,4 +42,5 @@
   (sh/run-siheom!
    (sh/render :Examples/counter)
    (sh/click! (q/button "click: 0"))
-   (sh/visible? (q/button "click: 1"))))
+   (sh/click! (q/button "click: 1"))
+   (sh/visible? (q/button "click: 2"))))

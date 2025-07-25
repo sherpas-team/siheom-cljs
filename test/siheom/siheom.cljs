@@ -6,7 +6,7 @@
    [vitest.support :refer [get-a11y-snapshot]]))
 
 (defn render [story-title]
-  {:name :render
+  {:action-key :render
    :args {:story-title story-title}})
 
 (defn click!
@@ -16,17 +16,17 @@
    ```
   "
   [locator]
-  {:name :click
+  {:action-key :click
    :args {:locator locator}})
 
 (defn value?
   [locator expected]
-  {:name :value?
+  {:action-key :value?
    :args {:locator locator :expected expected}})
 
 (defn file?
   [locator expected]
-  {:name :file?
+  {:action-key :file?
    :args {:locator locator :expected expected}})
 
 (defn count?
@@ -42,7 +42,7 @@
   ```
   "
   [locator expected]
-  {:name :count?
+  {:action-key :count?
    :args {:locator locator :expected expected}})
 
 (defn visible?
@@ -56,24 +56,24 @@
     "
   ([locator] (visible? locator true))
   ([locator expected]
-   {:name :visible?
+   {:action-key :visible?
     :args {:locator locator :expected expected}}))
 
 (defn match-a11y-snapshot?
   ([locator file-name]
-   {:name :match-a11y-snapshot?
+   {:action-key :match-a11y-snapshot?
     :args {:locator locator :file-name file-name}}))
 
 (defn match-table-snapshot?
   ([locator file-name]
-   {:name :match-table-snapshot?
+   {:action-key :match-table-snapshot?
     :args {:locator locator :file-name file-name}}))
 
 (defn pressed?
   ([locator]
    (pressed? locator true))
   ([locator expected]
-   {:name :pressed?
+   {:action-key :pressed?
     :args {:locator locator :expected expected}}))
 
 (defn readonly?
@@ -85,7 +85,7 @@
    (readonly? (q/textbox #\"회사 이메일*\"))
    ```"
   ([locator expected]
-   {:name :readonly?
+   {:action-key :readonly?
     :args {:locator locator :expected expected}}))
 
 (defn current?
@@ -101,7 +101,7 @@
    (sh/current? (q/link #\"김상현\") \"true\")
    ```"
   ([locator expected]
-   {:name :current?
+   {:action-key :current?
     :args {:locator locator :expected expected}}))
 
 (defn have-accessible-name?
@@ -121,7 +121,7 @@
      @see https://developer.mozilla.org/ko/docs/Glossary/Accessible_name
      "
   ([locator expected]
-   {:name :have-accessible-name?
+   {:action-key :have-accessible-name?
     :args {:locator locator :expected expected}}))
 
 (defn have-text-content?
@@ -136,21 +136,21 @@
                         [#\"정웅기\" #\"김태희\" #\"김상현\" #\"김현영\"])
      ```"
   ([locator expected]
-   {:name :have-text-content?
+   {:action-key :have-text-content?
     :args {:locator locator :expected expected}}))
 
 (defn disabled?
   ([locator]
    (disabled? locator true))
   ([locator expected]
-   {:name :disabled?
+   {:action-key :disabled?
     :args {:locator locator :expected expected}}))
 
 (defn read-only?
   ([locator]
    (read-only? locator true))
   ([locator expected]
-   {:name :read-only?
+   {:action-key :read-only?
     :args {:locator locator :expected expected}}))
 
 (defn checked?
@@ -174,7 +174,7 @@
   ([locator]
    (checked? locator true))
   ([locator expected]
-   {:name :checked?
+   {:action-key :checked?
     :args {:locator locator :expected expected}}))
 
 (defn selected?
@@ -198,7 +198,7 @@
   ([locator]
    (selected? locator true))
   ([locator expected]
-   {:name :selected?
+   {:action-key :selected?
     :args {:locator locator :expected expected}}))
 
 (defn expanded?
@@ -217,13 +217,13 @@
   ([locator]
    (expanded? locator true))
   ([locator expected]
-   {:name :expanded?
+   {:action-key :expanded?
     :args {:locator locator :expected expected}}))
 
 (defn error-message?
   "input이 기대하는 에러메시지를 가지고 있는지 검사합니다."
   [locator expected]
-  {:name :error-message?
+  {:action-key :error-message?
    :args {:locator locator :expected expected}})
 
 (defn have-href?
@@ -235,7 +235,7 @@
    ```
   "
   [locator expected]
-  {:name :have-href?
+  {:action-key :have-href?
    :args {:locator locator :expected expected}})
 
 (defn dbl-click!
@@ -245,7 +245,7 @@
    ```
   "
   [locator]
-  {:name :dbl-click!
+  {:action-key :dbl-click!
    :args {:locator locator}})
 
 (defn right-click!
@@ -255,13 +255,13 @@
    ```
   "
   [locator]
-  {:name :right-click!
+  {:action-key :right-click!
    :args {:locator locator}})
 
 (defn select!
   "select 컴포넌트 등을 클릭해서 열고, option을 선택합니다."
   [locator option-label]
-  {:name :select!
+  {:action-key :select!
    :args {:locator locator :option-label option-label}})
 
 (defn create-test-file [{:keys [content file-name type size]}]
@@ -284,12 +284,12 @@
    ```
   "
   [locator file]
-  {:name :upload!
+  {:action-key :upload!
    :args {:locator locator :file file}})
 
 (defn screenshot?
   [locator]
-  {:name :screenshot?
+  {:action-key :screenshot?
    :args {:locator locator}})
 
 (defn hover!
@@ -299,12 +299,12 @@
    ```
   "
   [locator]
-  {:name :hover!
+  {:action-key :hover!
    :args {:locator locator}})
 
 (defn have-logs?
   [expected]
-  {:name :have-logs?
+  {:action-key :have-logs?
    :args {:expected expected}})
 
 (defn clear!
@@ -314,7 +314,7 @@
    ```
   "
   [locator]
-  {:name :clear!
+  {:action-key :clear!
    :args {:locator locator}})
 
 (defn type!
@@ -324,13 +324,13 @@
    ```
   "
   [locator text]
-  {:name :type!
+  {:action-key :type!
    :args {:locator locator :text text}})
 
 (defn fill!
   "input이나 textarea 등의 요소에 기존 텍스트를 지우고 새 텍스트를 채웁니다."
   [locator text]
-  {:name :fill!
+  {:action-key :fill!
    :args {:locator locator :text text}})
 
 (defn paste!
@@ -340,7 +340,7 @@
    ```
   "
   [locator text]
-  {:name :paste!
+  {:action-key :paste!
    :args {:locator locator :text text}})
 
 (defn keyboard!
@@ -350,15 +350,15 @@
    ```
   "
   [text]
-  {:name :keyboard!
+  {:action-key :keyboard!
    :args {:text text}})
 
-(defn init-siheom [{:keys [actions hooks]}]
+(defn init-siheom [{:keys [actions hooks i18n]}]
   (fn [lines]
     (let [logs     (atom [])
           after-action (get hooks :after-action)
-          dispatch (fn [{:keys [name args]}]
-                     (let [action (get actions name)
+          dispatch (fn [{:keys [action-key args]}]
+                     (let [action (get actions action-key)
                            run! (partial (:run action) args)
                            action-log (:log action)
                            log (if (fn? action-log)
@@ -379,21 +379,20 @@
                   (js/Promise.resolve nil) lines)
           (.then (fn []
                    (cleanup)))
-          (.catch (fn []
-                    (fn [error]
-                      (let [max-length       (apply max (map (fn [log] (.-length log)) @logs))
-                            original-message (if (string? error) error (.-message error))
-                            index            (or (string/index-of original-message "Here are the accessible roles:")
-                                                 (string/index-of original-message "Ignored nodes:")
-                                                 (count original-message))]
-                        (set! (.-message (if (string? error) (new js/Error error) error))
-                              (str "\n[Siheom Logs]\n" (string/join "\n" (map #(.padEnd % (inc max-length) " ") @logs)) " <- !! FAILED !!\n\n"
-                                   "[Original Error Message]\n"
-                                   (subs original-message 0 index)
-                                   "\n[A11y Snapshot]\n"
-                                   (get-a11y-snapshot js/document.body)
-                                   "\n\n")))
-                      (throw error))))))))
+          (.catch (fn [error]
+                    (let [max-length       (apply max (map (fn [log] (.-length log)) @logs))
+                          original-message (if (string? error) error (.-message error))
+                          index            (or (string/index-of original-message "Here are the accessible roles:")
+                                               (string/index-of original-message "Ignored nodes:")
+                                               (count original-message))]
+                      (set! (.-message (if (string? error) (new js/Error error) error))
+                            (str "\n\n[" (get i18n :logs-title) "]\n\n" (string/join "\n" (map #(.padEnd % (inc max-length) " ") @logs)) " <- !! " (get i18n :failed) " !!\n\n\n"
+                                 "[" (get i18n :original-error-message) "]\n\n"
+                                 (subs original-message 0 index)
+                                 "\n[" (get i18n :a11y-snapshot) "]\n\n"
+                                 (get-a11y-snapshot js/document.body)
+                                 "\n\n")))
+                    (throw error)))))))
 
 (defn run-siheom! [& lines]
   (let [run-siheom-impl! (init-siheom default-runtime-impl)]

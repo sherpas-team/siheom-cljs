@@ -66,8 +66,11 @@
   [get-element expected]
   (waitFor (fn []
              (if expected
-               (get-element)
-               (assert (= (get-element) nil) "element is visible")))
+               (-> (js/expect (get-element))
+                   (.toBeInTheDocument))
+               (-> (js/expect (get-element))
+                   (.-not)
+                   (.toBeInTheDocument))))
            #js{:timeout 3000}))
 
 (defn disabled?

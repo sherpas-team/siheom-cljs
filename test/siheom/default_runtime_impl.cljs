@@ -68,11 +68,18 @@
   (new js/Promise (fn [resolve]
                     (js/setTimeout (fn [] (resolve nil)) duration))))
 
+(def ko-dict
+  {:logs-title "액션 로그"
+   :failed "실패"
+   :original-error-message "원본 에러 메시지"
+   :a11y-snapshot "접근성 스냅샷"})
+
 (def default-runtime-impl
   {:hooks   {:after-action (fn [{:keys [_name _args]}]
                              (waitFor (fn []
                                         (r/flush)
                                         (wait wait-duration))))}
+   :i18n    ko-dict
    :actions {:render react-render-impl
              :click {:run (fn [{:keys [locator]}]
                             (test-util/click! (fn [] (get-element locator))))
@@ -203,3 +210,8 @@
                                 (test-util/keyboard! text))
                          :log (fn [{:keys [text]}]
                                 (str "\"" text "\"를 입력한다!"))}}})
+
+(defn add-action [runtime-impl action-key {:keys [run log]}]
+  (assert (some? run))
+  (assert (some? log))
+  (assoc-in runtime-impl [:actions action-key] {:run run :log log}))

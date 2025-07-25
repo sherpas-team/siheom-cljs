@@ -6,3 +6,6 @@ target/vitest/js
 .vscode
 .cpcache
 .clj-kondo/funcool
+.clj-kondo/com.pitch/uix.core/config.edn
+.clj-kondo/com.pitch/uix.core/hooks/uix.clj
+.clj-kondo/reagent/reagent/config.edn

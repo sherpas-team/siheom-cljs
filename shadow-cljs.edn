@@ -6,7 +6,8 @@
         :modules {:main {:entries [core]}}}
   :test {:target             :esm-files
          :output-dir         "target/vitest/js"
-         :build-options      {:ns-aliases {}}
+         :build-options      {:ns-aliases {utils.toast utils.fake-toast
+                                           utils.download-file utils.fake-download-file}}
          :compiler-options   {:infer-externs                      :auto
                               :output-feature-set                 :es-next
                               :source-map                         true
