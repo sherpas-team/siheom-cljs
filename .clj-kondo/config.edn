@@ -4,6 +4,8 @@
                   :deprecated-var                {:level :off}}
  :lint-as        {vitest.clojure-testing/deftest clojure.test/deftest
                   vitest.clojure-testing/testing clojure.test/testing
-                  vitest.clojure-testing/is      clojure.test/is}
+                  vitest.clojure-testing/is      clojure.test/is
+                  uix.core/defui clojure.core/defn
+                  shadow.cljs.modern/js-await clojure.core/let}
  :output         {:show-rule-name-in-message false
                   :pattern                   "\u001b[31m::{{level}}\u001b[0m {{filename}}:{{row}}:{{col}} \u001b[31m::{{message}}\u001b[0m"}}
