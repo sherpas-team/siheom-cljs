@@ -1,0 +1,12 @@
+[{:action-key :render
+  :args {:story-title :Examples/counter}}
+ {:action-key :click
+  :args {:locator {:role "button"
+                   :name "click: 0"}}}
+ {:action-key :click
+  :args {:locator {:role "button"
+                   :name "click: 1"}}}
+ {:action-key :visible?
+  :args {:locator {:role "button"
+                   :name "click: 2"}
+         :expected true}}]

@@ -1,6 +1,6 @@
 (ns siheom.examples.counter-test
   (:require
-   ["@testing-library/react" :as tlr :refer [screen waitFor]]
+   ["@testing-library/react" :as rtl :refer [screen waitFor]]
    ["@testing-library/user-event" :default user-event]
    [promesa.core :as p]
    [reagent.core :as r]
@@ -15,7 +15,7 @@
  "click counter then 1 up : plain testing-library interop"
   (p/do
     (waitFor (fn []
-               (tlr/render (r/as-element [counter]))))
+               (rtl/render (r/as-element [counter]))))
     (waitFor (fn []
                (.click user-event (.getByRole screen "button" #js{:name "click: 0"}))))
     (waitFor (fn []
