@@ -1,0 +1,6 @@
+{:paths ["src" "test" "scripts"]
+ :deps {thheller/shadow-cljs {:mvn/version "3.1.8"}
+        com.pitch/uix.core {:mvn/version "1.4.4"}
+        com.pitch/uix.dom {:mvn/version "1.4.4"}
+        funcool/promesa {:mvn/version "11.0.678"}
+        reagent/reagent {:mvn/version "2.0.0-alpha2"}}}

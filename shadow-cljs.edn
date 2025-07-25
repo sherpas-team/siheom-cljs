@@ -1,0 +1,20 @@
+{:deps true
+ :dev-http {3000 "public"}
+ :builds
+ {:app {:target :browser
+        :js-options {:entry-keys ["module" "browser" "main"]}
+        :modules {:main {:entries [core]}}}
+  :test {:target             :esm-files
+         :output-dir         "target/vitest/js"
+         :build-options      {:ns-aliases {}}
+         :compiler-options   {:infer-externs                      :auto
+                              :output-feature-set                 :es-next
+                              :source-map                         true
+                              :source-map-detail-level            :all
+                              :source-map-include-sources-content true
+                              :source-map-use-fs-paths            true
+                              :warnings                           {:redef false}}
+         :js-options         {:js-provider :import}
+         :modules            {:siheom {:entries [vitest.support siheom.siheom]}}
+         :build-hooks        [(vitest.generate-modules-hook/hook)]
+         :portfolio/enabled? false}}}

@@ -1,0 +1,35 @@
+{
+  "name": "reagent-vitest-testing-lib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "shadow-cljs watch app",
+    "test:compile": "APP_ENV=test shadow-cljs watch test",
+    "test": "vitest",
+    "test:browser": "vitest --browser.provider=playwright --browser.name=chromium",
+    "test:headless": "vitest --browser.provider=playwright --browser.name=chromium --browser.headless"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@vitest/browser": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "accname": "^1.1.0",
+    "jsdom": "^26.1.0",
+    "playwright": "^1.54.1",
+    "scheduler": "^0.26.0",
+    "shadow-cljs": "^3.1.8",
+    "vitest": "^3.2.4",
+    "vitest-canvas-mock": "^0.3.3",
+    "ws": "^8.18.3"
+  }
+}

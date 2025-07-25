@@ -1,0 +1,8 @@
+.clj-kondo/.cache
+node_modules
+.shadow-cljs
+target/vitest/js
+.lsp
+.vscode
+.cpcache
+.clj-kondo/funcool
