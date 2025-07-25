@@ -1,14 +1,13 @@
-(ns siheom.util
+(ns siheom.testing-library-impl
   (:require
    ["@testing-library/react" :refer [fireEvent render screen waitFor within]]
    ["@testing-library/user-event" :default user-event]
    ["accname" :refer [getAccessibleName]]
    [clojure.string :as string]
-   [promesa.core :as p]
    [reagent.core :as r]
    [vitest.support :refer [get-a11y-snapshot rows->markdown table->markdown]]))
 
-(def wait-duration 20)
+(def wait-duration 0)
 
 (defn wait [duration]
   (waitFor (fn []
@@ -228,16 +227,17 @@
 
 (defn value?
   [get-element expected]
-  (p/do (visible? get-element true)
-        (waitFor (fn []
-                   (if (= (.-tagName (get-element)) "INPUT")
-                     (if (nil? (.-value (get-element)))
-                       (-> (js/expect (get-element))
-                           (.toHaveAttribute "value" expected))
-                       (-> (js/expect (get-element))
-                           (.toHaveValue expected)))
-                     (-> (js/expect (get-element))
-                         (.toHaveTextContent expected)))))))
+  (-> (visible? get-element true)
+      (.then (fn []
+               (waitFor (fn []
+                          (if (= (.-tagName (get-element)) "INPUT")
+                            (if (nil? (.-value (get-element)))
+                              (-> (js/expect (get-element))
+                                  (.toHaveAttribute "value" expected))
+                              (-> (js/expect (get-element))
+                                  (.toHaveValue expected)))
+                            (-> (js/expect (get-element))
+                                (.toHaveTextContent expected)))))))))
 
 (defn file?
   [get-element expected]
@@ -255,15 +255,16 @@
 
 (defn checked?
   [get-element expected]
-  (p/do
-    (waitFor (fn []
-               (if expected
-                 (-> (js/expect (get-element))
-                     (.toBeChecked))
-                 (-> (js/expect (get-element))
-                     (.-not)
-                     (.toBeChecked))))
-             #js{:timeout 3000})))
+  (-> (js/Promise.resolve)
+      (.then (fn []
+               (waitFor (fn []
+                          (if expected
+                            (-> (js/expect (get-element))
+                                (.toBeChecked))
+                            (-> (js/expect (get-element))
+                                (.-not)
+                                (.toBeChecked))))
+                        #js{:timeout 3000})))))
 
 (defn selected?
   [get-element expected]
